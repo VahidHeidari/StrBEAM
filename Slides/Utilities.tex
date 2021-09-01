@@ -1,0 +1,118 @@
+\usefonttheme{serif}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage[sort]{natbib}
+\usepackage{pdflscape}
+\usepackage{pgfplots}
+\usepackage{setspace}
+\usepackage{subfigure}
+\usepackage{tabulary}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{xcolor}
+\usepackage{xspace}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+\usetheme{Warsaw}
+
+
+% In this section you can change background color.
+\setbeamercolor{normal text}{fg=black}\usebeamercolor*{normal text}
+
+\definecolor{brightcerulean}{rgb}{0.11, 0.67, 0.84}
+
+\usecolortheme[named=brightcerulean]{structure}
+
+% Use below section to change slide background.
+%\usebackgroundtemplate%
+%{%
+%	\includegraphics[width=\paperwidth,height=\paperheight]{4.jpg}%
+%}
+
+\useoutertheme{infolines}
+
+
+\newtheorem{thm}{Theorem}
+\newtheorem{Def}{Definition}
+
+
+
+% Utilities
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Indentation
+\newcommand{\IndState} { \State \hskip1.5em }
+
+
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+
+% Probability
+\newcommand{\Prb}[2]       { \ensuremath #1 \left( #2 \right) }
+\newcommand{\Prior}[1]     { \Prb{\Pr}{#1}}
+\newcommand{\Prob}[1]      { \Prb{\Pr}{#1} }
+\newcommand{\CProb}[2]     { \Prb{\Pr}{#1 \mid #2} }
+\newcommand{\HProb}[2]     { \ensuremath{ {\Pr}_{#1} \left( #2 \right) } }
+\newcommand{\HCProb}[3]    { \ensuremath{ {\Pr}_{#1} ( #2 \mid #3 ) } }
+\newcommand{\HatHCProb}[3] { \ensuremath{ {\hat{\Pr}}_{#1} ( #2 \mid #3 ) } }
+
+
+% Distributions
+\newcommand{\BetaDist}[2]{ \mathcal{B}eta \left( #1, #2 \right) }
+\newcommand{\Bin}[1]{ \mathcal{B}inomial \left( #1 \right) }
+\newcommand{\Dir}[1]{ \mathcal{D}irichlet \left( #1 \right) }
+\newcommand{\GammaDist}[2]{ \mathcal{G}amma \left( #1, #2 \right) }
+\newcommand{\Cat}[1]{ \mathcal{C}ategorical \left( #1 \right) }
+\newcommand{\Norm}[2]{ \mathcal{N}ormal \left( #1, #2 \right) }
+\newcommand{\Pois}[1]{ \mathcal{P}oisson \left( #1 \right) }
+\newcommand{\Unif}[2]{ \mathcal{U}niform \left( #1, #2 \right) }
+\newcommand{\Bernoulli}[1] { \mathcal{B}ernoulli \left( #1 \right) }
+
+
+% Special functions
+\newcommand{\BetaFunc}[2]{ \mathcal{B} \left( #1, #2 \right) }
+\newcommand{\DigammaFunc}[1]{ \ensuremath { \psi \left( #1 \right) } }
+\newcommand{\GammaFunc}[1]{ \ensuremath { \Gamma \left( #1 \right) } }
+
+
+% Indicator
+\usepackage{stmaryrd}
+\newcommand{\Indic}[1]{ \ensuremath { \llbracket #1 \rrbracket } }
+\newcommand{\ArgMax}[2]{ \ensuremath { \underset{#1}{\arg\max} #2 } }
+
+
+% Pitman-Yor process
+\newcommand{\PitmanYor}[3]{ \ensuremath { \operatorname{PY} \left( #1, #2, #3 \right) } }
+
+
+% VB
+\newcommand{\Dns}[2]{ \ensuremath{ #1 \left( #2 \right) } }
+\newcommand{\CDns}[3]{ \ensuremath{ #1 \left( #2 | #3 \right) } }
+\newcommand{\Exp}[2]{ \ensuremath { \mathbb{E}_{#1} \left[ #2 \right] } }
+\newcommand{\KL}[2]{ \KLDiv{#1}{#2} }
+
+
+% Utility commands
+\newcommand{\Href}[1]{ \href{#1}{\color{blue}\underline{#1}} }
+
