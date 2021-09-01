@@ -5,21 +5,11 @@ import time
 import numpy as np
 import scipy.stats as st
 
+import Confs
+import Libs.CalcAccuracy
 import Libs.GenosFileFormats
 import Libs.Logger
 import Libs.PrettyPrinting
-import Libs.CalcAccuracy
-
-
-
-MAX_ITERS = 1000
-THINNING = 3
-MIN_SAMPLE_SIZE = 100
-CONV_EPSILONE = 1e-3
-
-NUM_ALLELES = 3
-LOG_ITERS = max(1, MAX_ITERS // 100)
-BURNIN_ITERS = max(5, MAX_ITERS // 3)
 
 
 
@@ -33,8 +23,6 @@ def ParseCmd(argv):
 
     num_clusters = int(argv[1])
     genos_path = argv[2]
-    Libs.Logger.Log('  K          : %d' % num_clusters)
-    Libs.Logger.Log('  Input Path : %s' % genos_path)
     return num_clusters, genos_path
 
 
@@ -47,10 +35,10 @@ def InitializeParameters(genos, num_clusters):
 
     q = np.zeros((num_indivs, num_clusters), dtype=np.float)
 
-    p = np.ones((num_clusters, num_loci, NUM_ALLELES)) / NUM_ALLELES
-    p += (np.random.rand(num_clusters, num_loci, NUM_ALLELES) - 0.5) * 0.5
-    rp = p.sum(2).repeat(NUM_ALLELES, axis=1)
-    p /= rp.reshape(num_clusters, num_loci, NUM_ALLELES)
+    p = np.ones((num_clusters, num_loci, Confs.NUM_ALLELES)) / Confs.NUM_ALLELES
+    p += (np.random.rand(num_clusters, num_loci, Confs.NUM_ALLELES) - 0.5) * Confs.ALLELE_PRIOR
+    rp = p.sum(2).repeat(Confs.NUM_ALLELES, axis=1)
+    p /= rp.reshape(num_clusters, num_loci, Confs.NUM_ALLELES)
     return z, q, p
 
 
@@ -59,14 +47,14 @@ def InitializeSamples(genos, num_clusters):
     num_loci = len(genos[0])
     smpl_z = np.zeros((num_indivs, num_loci, num_clusters), dtype=np.float)
     smpl_q = np.zeros((num_indivs, num_clusters), dtype=np.float)
-    smpl_p = np.zeros((num_clusters, num_loci, NUM_ALLELES), dtype=np.float)
+    smpl_p = np.zeros((num_clusters, num_loci, Confs.NUM_ALLELES), dtype=np.float)
     return smpl_z, smpl_q, smpl_p
 
 
 def CountAllelesAndOrigins(genos, z, num_clusters):
     num_indivs = len(genos)
     num_loci = len(genos[0])
-    cnt_genos = np.zeros((num_clusters, num_loci, NUM_ALLELES), dtype=np.int)
+    cnt_genos = np.zeros((num_clusters, num_loci, Confs.NUM_ALLELES), dtype=np.int)
     cnt_origs = np.zeros((num_indivs, num_clusters), dtype=np.int)
 
     # Count alleles and sub-population of origins.
@@ -120,14 +108,14 @@ def WriteParamsToFile(base_path, genos_path, smpl_z, smpl_q, smpl_p, cnt_smpls):
     with open(p_path, 'w') as f:
         for k in range(num_clusters):
             for l in range(num_loci):
-                f.write('  '.join(['%0.02f' % smpl_p[k, l, a] for a in range(NUM_ALLELES)]) + '\n')
+                f.write('  '.join(['%0.02f' % smpl_p[k, l, a] for a in range(Confs.NUM_ALLELES)]) + '\n')
             f.write('\n')
 
 
 def IsConverged(diff_llhood, itr, cnt_smpls):
-    if itr < BURNIN_ITERS:
+    if itr < Confs.BURNIN_ITERS:
         return False
-    return diff_llhood < CONV_EPSILONE and cnt_smpls > MIN_SAMPLE_SIZE
+    return diff_llhood < Confs.CONV_EPSILONE and cnt_smpls > Confs.MIN_SAMPLE_SIZE
 
 
 
@@ -137,23 +125,25 @@ if __name__ == '__main__':
     genos = Libs.GenosFileFormats.ReadGenotypeFile(genos_path)
     if len(genos) == 0:
         Libs.Logger.Log('Could not read genotype file!')
-        exit(1)
+        exit(2)
 
     num_indivs = len(genos)
     num_loci = len(genos[0])
+    Libs.Logger.Log('  K            : %d' % num_clusters)
+    Libs.Logger.Log('  Input Path   : %s' % genos_path)
     Libs.Logger.Log('  Num Indivs   : %d' % num_indivs)
     Libs.Logger.Log('  Num Loci     : %d' % num_loci)
-    Libs.Logger.Log('  BURNIN       : %d' % BURNIN_ITERS)
-    Libs.Logger.Log('  MCMC         : %d' % MAX_ITERS)
-    Libs.Logger.Log('  Log Iter     : %d' % LOG_ITERS)
-    Libs.Logger.Log('  Thinning     : %d' % THINNING)
-    Libs.Logger.Log('  Conv Epsilon : %f' % CONV_EPSILONE)
+    Libs.Logger.Log('  BURNIN       : %d' % Confs.BURNIN_ITERS)
+    Libs.Logger.Log('  MCMC         : %d' % Confs.MAX_ITERS)
+    Libs.Logger.Log('  Log Iter     : %d' % Confs.LOG_ITERS)
+    Libs.Logger.Log('  Thinning     : %d' % Confs.THINNING)
+    Libs.Logger.Log('  Conv Epsilon : %f' % Confs.CONV_EPSILONE)
     Libs.Logger.Log('\ngenos:')
     Libs.PrettyPrinting.PrintListOfLists(genos)
 
     Libs.Logger.Log('\n{}  Initialize parameters . . .'.format(time.ctime()))
     z, q, p = InitializeParameters(genos, num_clusters)
-    prior_lambda = np.ones((num_clusters, NUM_ALLELES), dtype=np.float) * 0.1
+    prior_lambda = np.ones((num_clusters, Confs.NUM_ALLELES), dtype=np.float) * 0.1
     prior_alpha = np.ones((num_clusters), dtype=np.float) / num_clusters
     cnt_genos, cnt_origs = CountAllelesAndOrigins(genos, z, num_clusters)
 
@@ -161,13 +151,13 @@ if __name__ == '__main__':
     cnt_smpls = 0
 
     Libs.Logger.Log('{}  Start of MCMC . . .'.format(time.ctime()))
-    cnt_thining = THINNING
+    cnt_thining = Confs.THINNING
     llhood = CalculateLikelihood(genos, z, q, p)
     diff_llhood = 0
-    for itr in range(1, BURNIN_ITERS + 1 + MAX_ITERS + 1):
+    for itr in range(1, Confs.BURNIN_ITERS + Confs.MAX_ITERS + 1):              # Run MCMC sampling loop.
         # Log progress.
-        if itr == 1 or (itr % LOG_ITERS) == 0:
-            loop_str = 'BURNIN' if itr < BURNIN_ITERS else 'MCMC'
+        if itr == 1 or (itr % Confs.LOG_ITERS) == 0:
+            loop_str = 'BURNIN' if itr < Confs.BURNIN_ITERS else 'MCMC'
             fmt_tuple = (time.ctime(), loop_str, itr, llhood, diff_llhood, cnt_smpls)
             Libs.Logger.Log('%s  %s  itr #%d    llhood -> %f   diff -> %f    #smpls -> %d' % fmt_tuple)
 
@@ -193,9 +183,9 @@ if __name__ == '__main__':
                     cnt_origs[i, new_z] += 1
 
         # Save samples if we are in MCMC loop.
-        if itr > BURNIN_ITERS:
+        if itr > Confs.BURNIN_ITERS:
             cnt_thining += 1
-            if cnt_thining > max(1, THINNING):
+            if cnt_thining > max(1, Confs.THINNING):
                 cnt_thining = 1
                 cnt_smpls += 1
                 smpl_p += p
