@@ -1,6 +1,8 @@
 import numpy as np
 import scipy.special as sp
 
+import confs
+
 
 
 def GetLogMarginalCatDir(counts, params):
@@ -52,6 +54,13 @@ def CountCombAlleles(genos, labels, loci_list):
         cmb = GetComb(snps)
         counts[labels[i]][cmb] += 1
     return counts
+
+
+def IsConverged(diff_llhood, itr, cnt_smpls):
+    if itr < confs.BURNIN_ITERS:
+        return False
+    return diff_llhood < confs.CONV_EPSILONE and cnt_smpls > confs.MIN_SAMPLE_SIZE
+
 
 
 if __name__ == '__main__':
