@@ -1,17 +1,14 @@
 import numpy as np
 import scipy.special as sp
 
-
-
-ALPHA = 1.5
-alleleCn = 3
+import priors
 
 
 
 def CountAlleles(dataC, dataU):
     num_loci = len(dataC[0])
-    cnt_u = [ [0 for l in range(alleleCn) ] for j in range(num_loci) ]
-    cnt_c = [ [0 for l in range(alleleCn) ] for j in range(num_loci) ]
+    cnt_u = [ [0 for l in range(priors.NUM_ALLELES) ] for j in range(num_loci) ]
+    cnt_c = [ [0 for l in range(priors.NUM_ALLELES) ] for j in range(num_loci) ]
     for i in dataU:
         for j in range(len(i)):
             g = i[j]
@@ -31,13 +28,13 @@ def CountAlleles(dataC, dataU):
 def GetComb(genos):
     cmb = 0
     for l in range(len(genos)):
-        cmb *= alleleCn
+        cmb *= priors.NUM_ALLELES
         cmb += genos[l]
     return cmb
 
 
 def CountCombinations(genos, loci):
-    num_combs = alleleCn ** len(loci)
+    num_combs = priors.NUM_ALLELES ** len(loci)
     cnt = np.zeros((num_combs), dtype=int)                                      # Count combinations.
     for indiv in genos:
         x = [ indiv[l] for l in loci ]
@@ -46,7 +43,7 @@ def CountCombinations(genos, loci):
     return cnt
 
 
-def GetLogProbDirCat(cnt, k, prior=ALPHA):
+def GetLogProbDirCat(cnt, k, prior=priors.ALPHA):
     p = prior / (3 ** k)
     lgg_p = sp.loggamma(p)
     lg = 0
@@ -56,4 +53,9 @@ def GetLogProbDirCat(cnt, k, prior=ALPHA):
         Nc += n_i
     lg += sp.loggamma(prior) - sp.loggamma(Nc + prior)
     return lg
+
+
+
+if __name__ == '__main__':
+    print('This is module!')
 

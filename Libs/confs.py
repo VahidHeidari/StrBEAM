@@ -10,3 +10,8 @@ CONV_EPSILONE = 5e-1
 LOG_ITERS = max(1, MAX_ITERS // 100)
 BURNIN_ITERS = max(5, MAX_ITERS // 3)
 
+
+
+if __name__ == '__main__':
+    print('This is a configuration file!')
+

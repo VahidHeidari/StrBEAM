@@ -13,3 +13,8 @@ pD = 0.1
 pC = 1.0 - pD
 pI = 0.1
 
+
+
+if __name__ == '__main__':
+    print('This is a configuration file!')
+

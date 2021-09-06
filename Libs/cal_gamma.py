@@ -3,7 +3,6 @@ import unittest
 import numpy as np
 
 import cal_joint_lps
-import common
 import data_set_4
 import mix_lp
 

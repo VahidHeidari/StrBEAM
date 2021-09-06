@@ -1,4 +1,3 @@
-import copy
 import unittest
 
 import numpy as np
@@ -108,7 +107,7 @@ def InitializeGraph():
     graph.SetInteraction(0, 1)
     graph.SetInteraction(2, 3)
     graph.SetInteraction(2, 4)
-    #print(graph.ToString())
+    print(graph.ToString())
     return graph
 
 
@@ -144,7 +143,7 @@ class GetDLPTestCase(unittest.TestCase):
         print(dgamma1)
         print(dgamma02)
         print(dgamma12)
-        #print(graph.ToString())
+        print(graph.ToString())
         self.CheckDgammaEq([ dgamma0, dgamma1, dgamma02, dgamma12 ], EXP_DGAMMAS)
 
 

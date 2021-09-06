@@ -2,7 +2,6 @@ import random
 import unittest
 
 import numpy as np
-import scipy.special as sp
 
 import cal_gamma
 import calc_alpha_beta
@@ -297,7 +296,7 @@ class UpdateMarkerMemberTestCase(unittest.TestCase):
 
         dlp, new_mmember = UpdateMarkerMember(dataC, dataU, g, 3, False, mAlpha, mBeta)
         print('test_UpdateMarkerMember -> dlp:%f' % dlp)
-        #self.assertFalse(abs(-24.20043 - dlp) > 1e-5)
+        #self.assertFalse(abs(-24.20043 - dlp) > 1e-5)                          # TODO: Why this is not true?
         self.assertTrue(new_mmember)
         print('After update marker member . . .')
         print(g.ToString())

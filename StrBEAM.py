@@ -7,11 +7,9 @@ import numpy as np
 import scipy.stats as st
 
 import Libs.cal_full_lp
-import Libs.cal_graph_lp
 import Libs.calc_accuracy
 import Libs.calc_alpha_beta
 import Libs.confs
-import Libs.disease_graph
 import Libs.genos_file_formats
 import Libs.initialize_marker_member
 import Libs.logger
@@ -91,8 +89,8 @@ if __name__ == '__main__':
     samples = np.zeros(num_loci * 2)
     log_p = 0
     for k in range(num_clusters):
-        gn = [ genos[n] for n in range(num_indivs) if smpl_q[n].argmax() == k ]
-        lbl = [ labels[n] for n in range(num_indivs) if smpl_q[n].argmax() == k ]
+        gn = [ genos[n] for n in range(num_indivs) if q[n].argmax() == k ]
+        lbl = [ labels[n] for n in range(num_indivs) if q[n].argmax() == k ]
         du = [ gn[n] for n in range(len(gn)) if lbl[n] == 0 ]
         dc = [ gn[n] for n in range(len(gn)) if lbl[n] == 1 ]
         ma, mb = Libs.calc_alpha_beta.InitAlphaBeta(gn, lbl, Libs.priors.ALPHA)
@@ -156,10 +154,10 @@ if __name__ == '__main__':
                 mAlpha = []
                 mBeta = []
                 for k in range(num_clusters):
-                    gn  = [  genos[n] for n in range(num_indivs) if smpl_q[n].argmax() == k ]
-                    lbl = [ labels[n] for n in range(num_indivs) if smpl_q[n].argmax() == k ]
-                    du  = [     gn[n] for n in range(len(gn))    if lbl[n] == 0 ]
-                    dc  = [     gn[n] for n in range(len(gn))    if lbl[n] == 1 ]
+                    gn = [ genos[n] for n in range(num_indivs) if q[n].argmax() == k ]
+                    lbl = [ labels[n] for n in range(num_indivs) if q[n].argmax() == k ]
+                    du = [ gn[n] for n in range(len(gn)) if lbl[n] == 0 ]
+                    dc = [ gn[n] for n in range(len(gn)) if lbl[n] == 1 ]
                     ma, mb = Libs.calc_alpha_beta.InitAlphaBeta(gn, lbl, Libs.priors.ALPHA)
                     dataU.append(du);  dataC.append(dc)
                     mAlpha.append(ma); mBeta.append(mb)

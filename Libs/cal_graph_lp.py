@@ -64,7 +64,7 @@ class CalFullLPTestCase(unittest.TestCase):
         lp0, lp1 = CalGraphLP(dataC, dataU, mmember, g, mAlpha, mBeta)
         print('test_CalGraphLP   ->   lp0:%f    lp1:%f' % (lp0, lp1))
         self.assertTrue(abs(10.9663113126 - lp0) < 1e-5)
-        #self.assertTrue(abs(55.9288950713 - lp1) < 1e-5)
+        #self.assertTrue(abs(55.9288950713 - lp1) < 1e-5)                       # TODO: Why this is not return true value?
         self.assertTrue(abs(53.654951 - lp1) < 1e-5)
 
 
