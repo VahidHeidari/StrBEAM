@@ -11,8 +11,9 @@ class GraphSample:
 
 
 #
-# Interaction matrix is symmetric, so for save memory the represented as lower
-# triangular matrix. For example graph with 4 cliques is like:
+# Interaction matrix is symmetric, so it can be represented as a lower
+# triangular matrix, for saving memory, for example, a graph with 4 cliques is
+# look like as follows:
 #
 #     +-+
 #  0  | |
@@ -25,7 +26,7 @@ class GraphSample:
 #     +-+-+-+-+
 #      0 1 2 3
 #
-# All elements in main diagonal elemnts are 0 so doesn't need to save them.
+# All elements in main diagonal elemnts are 0, so we don't have to save them.
 # Number of elements of graph with 'n' cliques is:
 #   num_elem = n * (n + 1) / 2 - n
 #
